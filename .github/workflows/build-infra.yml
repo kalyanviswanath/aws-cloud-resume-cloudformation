@@ -1,4 +1,4 @@
-name: Test
+name: Build Infra
 on: [workflow_dispatch]
 env:
   GO_VERSION: 1.20.1
