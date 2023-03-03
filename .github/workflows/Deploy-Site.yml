@@ -1,20 +1,20 @@
-name: Test
-on: [workflow_dispatch]
+name: Deploy Site
+on: push
 env:
   GO_VERSION: 1.20.1
   
 jobs: 
-  build-infra:
+  deploy-site:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: jakejarvis/s3-sync-action@master
         with:
-          go-version: ${{ env.GO_VERSION }}
-      - name: test get-function
-        run: cd get-function && go test -v ./ && cd ../../
-      - name: test put-function
-        run: cd put-function && go test -v ./ && cd ../../
+          args: --delete
+        env:
+          AWS_S3_BUCKET: kalyan-viswanath
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: ./resume-site
 
   
